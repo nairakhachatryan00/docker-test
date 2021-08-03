@@ -1,0 +1,36 @@
+  version: '3.6'
+  services:
+    docker:
+      build:
+        context: .
+      restart: always
+      cap_add:
+        - ALL
+      ports:
+        - "3000:3000"
+      container_name: docker-app
+      depends_on:
+        - db
+      volumes:
+        - ./:/docker
+      networks:
+        local-net:
+          aliases:
+            - docker
+    db:
+      image: mysql:8.0.26
+      restart: always
+      environment:
+        MYSQL_DATABASE: 'db'
+        MYSQL_USER: 'naira'
+        MYSQL_PASSWORD: '2017'
+        MYSQL_ROOT_PASSWORD: '2017'
+      ports:
+        - '3306:3306'
+      expose:
+        - '3306'
+      volumes:
+        -  /data/db:/var/lib/mysql
+  networks:
+    local-net:
+      external: false
